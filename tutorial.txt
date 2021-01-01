@@ -1,0 +1,28 @@
+Tutorial:
+
+- Type the letter sequences below to see how it works.
+
+; d o t [space] [space]
+>
+
+; d o t [space] [space] [period]
+>
+
+; d o t [space] [space] [escape]
+>
+
+; d o t [space] [space] [escape] [escape]
+>
+
+; d o t [period]
+>
+
+; d o t [period] [escape]
+>
+
+; d o t [space] t e x t
+>
+
+; d o t [space] [escape] t e x t
+>
+

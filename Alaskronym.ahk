@@ -4,6 +4,14 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 Menu, Tray, Icon, abc.ico
 Menu, Tray, NoStandard
+Menu, Tray, Add, Uninstall, Uninstall
+Menu, Tray, Add, Tutorial, Tutorial
+
+; need to add tutoarial and uninstall labels. 
+; need to add tutorial file to install
+; need to creat uninstall script.
+
+Menu, Tray, Add, ,
 Menu, Tray, Add, Settings, Settings
 Menu, Tray, Add, ,
 Menu, Tray, Add, Exit, ExitApp
@@ -85,6 +93,18 @@ return
 ;=====================================================================================	
 Settings:
 	Gui, Show, w820 h700, Alaskronym - The Alaskan acronym helper program.
+return
+;=====================================================================================	
+Uninstall:
+	run, uninstaller.exe
+	exitapp
+return
+;=====================================================================================	
+Tutorial:
+	temp_tutorial_file := A_Temp "\tutorial_" A_now ".txt"
+	FileCopy, tutorial.txt, % temp_tutorial_file
+	cmd := "notepad """ temp_tutorial_File """"
+	Run, % cmd
 return
 ;=====================================================================================	
 ; 2 entry points for add edit...
