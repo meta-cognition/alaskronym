@@ -96,7 +96,9 @@ Settings:
 return
 ;=====================================================================================	
 Uninstall:
-	run, uninstaller.exe
+	uninstaller_spawn := A_Temp "\Uninstaller_" a_Now ".exe"
+	FileCopy, Uninstaller.exe, % uninstaller_spawn
+	run, % uninstaller_spawn
 	exitapp
 return
 ;=====================================================================================	
