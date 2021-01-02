@@ -106,7 +106,7 @@ Tutorial:
 	temp_tutorial_file := A_Temp "\tutorial_" A_now ".txt"
 	FileCopy, tutorial.txt, % temp_tutorial_file
 	cmd := "notepad """ temp_tutorial_File """"
-	Run, % cmd
+	Run, % cmd, % A_Temp
 return
 ;=====================================================================================	
 ; 2 entry points for add edit...
@@ -374,116 +374,110 @@ acronym_function() {
 	{
 		ThisHotKeyParts := StrSplit( A_ThisHotKey, ":" )
 		acronym_key := ThisHotkeyParts[3]
-		Loop, % StrLen(acronym_key) 
-		{
-			Send, `b
-		}
+		SendBackspace(StrLen(acronym_key))
 		; Below is to count our own input for hotstrings with special commands like {tab} or {return}
 		ih := InputHook("V")
 		ih.Start()
 		; If A_EndChar is a period or comma, then we will not be expanding further.
 		If ( A_EndChar != " " )
 		{
+			; [period/comma/enter]
 			; Send the lookup from the acronym_object as well as A_EndChar.
 			Send, % acronym_object[acronym_key].text . A_EndChar
 			; Single character input, if escape, we undo.
 			Input, 2ndEndChar, L1
 			if ( 2ndEndChar = Chr(27) )
 			{	
-				Loop, % StrLen(acronym_object[acronym_key].text . A_EndChar)
-				{
-					
-					Send, `b
-				}
+				; [period/comma/enter][escape]
+				SendBackspace(StrLen(acronym_object[acronym_key].text . A_EndChar))
 				SendRaw, % substr(A_ThisHotkey, 8) 
-				Hotstring("Reset")
-				SendLevel, 1	
-				Send, % A_EndChar
-				SendLevel, 0
+				SendElevated(A_EndChar)
 				return
 			}
+			; [period/comma/enter][{other}]
 			; if 2ndEndChar was not escape, send it.
-			; elevate SendLevel for this final character so it can feedback to this script.
-			SendLevel, 1			
-			Send, % 2ndEndChar
-			SendLevel, 0
+			; elevate SendLevel for this final character so it can feedback to this script.		
+			SendElevated(2ndEndChar)
 			return
 		}
 		; If here, A_EndChar must be SPACE, and we have the possibility of expanding to full text and several complex outcomes.
 		; Send replacement text (likely the acronym in all CAPS)
 		Send, % acronym_object[acronym_key].text . A_EndChar
 		; Stop counting characters sent.
-		ih_count := StrLen(ih.input)
+		ih_count_1 := StrLen(ih.input)
 		ih.stop()
 		; Single character input, if escape, we undo.
 		Input, 2ndEndChar, L1
 		if ( 2ndEndChar = Chr(27) )
 		{	
-			Loop, % ih_count ;StrLen(acronym_object[acronym_key].text . A_EndChar)
-			{
-				Send, `b
-			}
+			SendBackspace(ih_count_1)
 			SendRaw, % substr(A_ThisHotkey, 8) . A_EndChar
 			return
 		}
 		; If they've pressed space for a second time, we now expand the hotstring.
 		if ( 2ndEndChar = A_Space )
 		{	
+			; [space][space]
 			if (acronym_object[acronym_key].fulltext = "" )
 			{
 				return
 			}
-			Loop, % ih_count ; StrLen(acronym_object[acronym_key].text) 
-			{
-				Send, `b
-			}
+			SendBackspace(ih_count_1)
 			ih := InputHook("V")
 			ih.Start()
 			Send, % acronym_object[acronym_key].fulltext	
-			ih_count := StrLen(ih.input)
+			ih_count_2 := StrLen(ih.input)
 			ih.stop()
 			; Now here's where it gets complicated, we want them to be able to escape all the way back to the top.
-			; We check for an escape press
+			; Check for an escape press
 			Input, 3rdEndChar, L1
 			if ( 3rdEndChar = Chr(27) )
 			{	
-				Loop, % ih_count ;StrLen(acronym_object[acronym_key].fulltext)
-				{
-					Send, `b
-				}
-				Send, % acronym_object[acronym_key].text . A_EndChar . 2ndEndChar
+				; [space][space][escape]
+				SendBackspace(ih_count_2)
+				Send, % acronym_object[acronym_key].text . A_EndChar 
 				Input, 4thEndChar, L1
 				if ( 4thEndChar = Chr(27) )
 				{	
-					Loop, % StrLen(acronym_object[acronym_key].text . A_EndChar . 2ndEndChar)
-					{
-						Send, `b
-					}
-					;Send, % substr(A_ThisHotkey, 8) . A_EndChar . 2ndEndChar
-					SendRaw, % substr(A_ThisHotkey, 8) . A_EndChar
-					Hotstring("Reset")
-					SendLevel, 1	
-					Send, % 2ndEndChar
-					SendLevel, 0
+					; [space][space][escape][escape]
+					SendBackspace(ih_count_1)
+					; Initiator can't have special characters or keystrokes, SendRaw
+					SendRaw, % substr(A_ThisHotkey, 8)
+					SendElevated(A_EndChar)
 					return
 				}
-				SendLevel, 1
-				Send, % 4thEndChar
-				SendLevel, 0
+				; [space][space][escape][{other}]
+				SendElevated(4thEndChar)
 				return
 			}
-			SendLevel, 1
-			Send, % 3rdEndChar
-			SendLevel, 0
+			; [space][space][{other}]
+			SendElevated(3rdEndChar)
 			return
 		}
-		else {
-			SendLevel, 1
-			Send, % 2ndEndChar
-			SendLevel, 0
+		else 
+		{
+			SendElevated(2ndEndChar)
 			return
 		}
 	}
 	send, % A_EndChar
 }
+;=====================================================================================	
+; allows script to detect it's own sends as part of a hotstring
+SendElevated(char) {
+	SendLevel, 1
+	Send, % char
+	SendLevel, 0
+}
+;=====================================================================================	
+; for readability
+SendBackspace(i)
+{
+	Loop % i
+	{
+		Send, `b
+	}
+}
+
+
 
