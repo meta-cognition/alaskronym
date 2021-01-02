@@ -465,6 +465,7 @@ acronym_function() {
 ;=====================================================================================	
 ; allows script to detect it's own sends as part of a hotstring
 SendElevated(char) {
+	Hotstring("Reset")
 	SendLevel, 1
 	Send, % char
 	SendLevel, 0
