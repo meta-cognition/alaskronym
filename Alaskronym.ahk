@@ -2,6 +2,17 @@
 #SingleInstance, Force
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+
+CodeVersion := A_Now, company := "MIT License"
+;@Ahk2Exe-Let U_version = %A_PriorLine~U)^(.+"){1}(.+)".*$~$2%
+;@Ahk2Exe-Let U_company = %A_PriorLine~U)^(.+"){3}(.+)".*$~$2%
+;@Ahk2Exe-SetDescription Acronym software.
+;@Ahk2Exe-SetVersion %U_version%
+;@Ahk2Exe-SetCopyright Copyright (c) 2020`, Dom Pannone
+;@Ahk2Exe-SetOrigFilename Alaskronym.ahk
+;@Ahk2Exe-SetCompanyName %U_company%
+
+
 Menu, Tray, Icon, abc.ico
 Menu, Tray, NoStandard
 Menu, Tray, Add, Uninstall, Uninstall
@@ -126,8 +137,8 @@ AddEdit:
 	Gui, 2:Add, Edit, x10 y40  w520 h20 vcol_1, % col_1
 	Gui, 2:Add, Edit, x10 y100 w520 h20 vcol_2, % col_2
 	Gui, 2:Add, Edit, x10 y160 w520 h20 vcol_3, % col_3
-	Gui, 2:Add, Text, x10 y20  w520 h20 , INTIATOR - should be all lowercase`, the keys that trigger the following sequences...
-	Gui, 2:Add, Text, x10 y80  w520 h20 , CONVERTS TO - suggest acronym in all caps of whatever INIITIATOR is.
+	Gui, 2:Add, Text, x10 y20  w520 h20 , INITIATOR - should be all lowercase`, the keys that trigger the following sequences...
+	Gui, 2:Add, Text, x10 y80  w520 h20 , CONVERTS TO - typically the above INITIATOR acronym, but in all caps.
 	Gui, 2:Add, Text, x10 y140 w520 h20 , EXPANDS TO - text that will be typed if the acronym is expanded with [spacebar] x 2.
 	Gui, Add, Button, x320 y190 w100 h30 Default gDoSave, Save
 	Gui, Add, Button, x430 y190 w100 h30 g2GuiClose, Cancel
