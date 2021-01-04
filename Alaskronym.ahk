@@ -3,14 +3,7 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-CodeVersion := A_Now, company := "MIT License"
-;@Ahk2Exe-Let U_version = %A_PriorLine~U)^(.+"){1}(.+)".*$~$2%
-;@Ahk2Exe-Let U_company = %A_PriorLine~U)^(.+"){3}(.+)".*$~$2%
-;@Ahk2Exe-SetDescription Acronym software.
-;@Ahk2Exe-SetVersion %U_version%
-;@Ahk2Exe-SetCopyright Copyright (c) 2020`, Dom Pannone
-;@Ahk2Exe-SetOrigFilename Alaskronym.ahk
-;@Ahk2Exe-SetCompanyName %U_company%
+#Include compiler_directives.ahk
 
 
 Menu, Tray, Icon, abc.ico

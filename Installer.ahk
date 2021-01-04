@@ -4,6 +4,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #NoTrayIcon
 
+#Include compiler_directives.ahk
 #Include installer_file_references.ahk
 
 MsgBox, 4, Alaskronym Installer, Would you like to install Alaskronym? (press Yes or No)
