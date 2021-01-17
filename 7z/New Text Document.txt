@@ -1,0 +1,1 @@
+copy /b 7zS.sfx + config.txt + alaskronym_installer_current.7z Alaskronym_Installer.exe
